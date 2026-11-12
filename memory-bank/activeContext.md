@@ -1,6 +1,6 @@
 # Active Context
 
-_Last updated: 2026-11-12. Read this first, then `progress.md`._
+_Last updated: 2026-11-13. Read this first, then `progress.md`._
 
 ## What this project is
 Statistics system for Hajj/Umrah trips entering the "Guests of Allah service city" (مدينة خدمة ضيوف الرحمن), built for a non-profit association. Staff record trips; admins see dashboards/reports. UI is **Arabic, RTL**, minimalist white + dark green + gold.
@@ -35,6 +35,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - **In-app account creation:** the admin Settings screen invokes `supabase/functions/admin-create-user`; the Edge Function verifies the caller's JWT and admin profile before using the server-side service-role secret to create an email-confirmed entry user.
 - **In-app account deletion:** Settings invokes `supabase/functions/admin-delete-user`; it verifies admin access server-side, prevents deleting the current or only admin, and blocks deletion when trips reference that user so historical ownership remains intact.
 - The user deletion button displays an Arabic loading label and inline spinner while its request is in progress.
+- The Settings users list uses the Log screen's card row pattern, with role as muted detail and horizontal promotion/demotion and destructive delete actions.
 
 ## Open questions / needs owner confirmation
 - Is "Allow new users to sign up" disabled in Supabase Auth? (Security-critical; cannot be set via MCP. Unconfirmed.)

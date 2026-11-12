@@ -124,16 +124,18 @@ export default function SettingsScreen({ officials, services, users, me, trips, 
         <Field label="كلمة المرور (٨ أحرف على الأقل)" value={newPassword} onChangeText={setNewPassword} secureTextEntry autoCapitalize="none" />
         <Btn title={creating ? 'جارٍ إنشاء الحساب…' : 'إضافة مستخدم'} onPress={addUser} disabled={creating} />
         {userMessage && <Msg kind={userMessage.error ? 'er' : 'ok'}>{userMessage.text}</Msg>}
-        {users.map((u) => (
-          <View key={u.id} style={{ marginBottom: 6 }}>
-            <T>{`${u.email} — ${u.role === 'admin' ? 'مدير' : 'مدخل بيانات'}`}</T>
-            {u.id !== me.id && <>
-              <Btn kind="o" title={u.role === 'admin' ? 'خفض إلى مدخل بيانات' : 'ترقية إلى مدير'} onPress={() => flip(u)} />
-              <Btn kind="o" title={deletingUserId === u.id ? 'جارٍ الحذف…' : 'حذف المستخدم'} loading={deletingUserId === u.id} disabled={deletingUserId !== null} onPress={() => removeUser(u)} />
-            </>}
-          </View>
-        ))}
       </Card>
+      <H>قائمة المستخدمين</H>
+      {users.map((u) => (
+        <Card key={u.id}>
+          <T bold>{u.email ?? 'مستخدم'}</T>
+          <T mu>{u.role === 'admin' ? 'مدير' : 'مدخل بيانات'}</T>
+          {u.id !== me.id && <View style={{ flexDirection: 'row', gap: 8 }}>
+            <View style={{ flex: 1 }}><Btn kind="o" title={u.role === 'admin' ? 'خفض' : 'ترقية'} onPress={() => flip(u)} /></View>
+            <View style={{ flex: 1 }}><Btn kind="d" title={deletingUserId === u.id ? 'جارٍ الحذف…' : 'حذف'} loading={deletingUserId === u.id} disabled={deletingUserId !== null} onPress={() => removeUser(u)} /></View>
+          </View>}
+        </Card>
+      ))}
       <Card><H>نسخة احتياطية</H><Btn kind="o" title="مشاركة نسخة JSON" onPress={backup} /></Card>
     </View>
   );
