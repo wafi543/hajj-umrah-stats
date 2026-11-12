@@ -136,7 +136,9 @@ do $$ begin
 exception when duplicate_object then null; end $$;
 
 -- ---------- بيانات أولية (يمكن للمدير تغييرها من التطبيق) ----------
-insert into public.services (name) values ('إرشاد'), ('نقل'), ('إسكان'), ('رعاية صحية')
+insert into public.services (name) values
+  ('إرشاد'), ('نقل'), ('إسكان'), ('رعاية صحية'),
+  ('ضيافة سعودية'), ('وجبات'), ('سقيا')
 on conflict (name) do nothing;
 
 

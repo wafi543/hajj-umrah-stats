@@ -20,6 +20,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 ## Immediate next steps
 1. Deploy `admin-delete-user` with the Supabase CLI (the CLI was unavailable in the latest environment) and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
 2. Apply the updated `supabase/schema.sql` in Supabase SQL Editor to create `trip_services`, apply its RLS policies, and backfill existing trips.
+   The schema seed now also adds the trip service options ضيافة سعودية، وجبات، وسقيا.
 3. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
 3. Test login as admin and as an entry user, including creating the entry account from Settings.
 4. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
