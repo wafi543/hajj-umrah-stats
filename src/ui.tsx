@@ -36,6 +36,19 @@ export function Chips<I extends { id: number | string; name: string }>({ items, 
   );
 }
 
+export function MultiChips<I extends { id: number | string; name: string }>({ items, value, onChange }: { items: I[]; value: Array<I['id']>; onChange: (id: I['id']) => void }) {
+  return (
+    <View style={s.chips}>
+      {items.map((i) => {
+        const selected = value.includes(i.id);
+        return <Pressable key={String(i.id)} onPress={() => onChange(i.id)} style={[s.chip, selected && { backgroundColor: C.g, borderColor: C.g }]}>
+          <Text style={{ color: selected ? '#fff' : C.tx }}>{i.name}</Text>
+        </Pressable>;
+      })}
+    </View>
+  );
+}
+
 export const Msg = ({ kind, children }: { kind: 'ok' | 'er'; children: React.ReactNode }) =>
   <View style={[s.msg, { backgroundColor: kind === 'ok' ? 'rgba(15,81,50,.12)' : 'rgba(179,38,30,.12)' }]}><Text style={{ color: kind === 'ok' ? C.g : C.err }}>{children}</Text></View>;
 

@@ -44,6 +44,15 @@ create table if not exists public.trips (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+-- Multiple services per trip; service_id remains as a legacy compatibility field.
+create table if not exists public.trip_services (
+  trip_id bigint not null references public.trips(id) on delete cascade,
+  service_id bigint not null references public.services(id) on delete restrict,
+  primary key (trip_id, service_id)
+);
+insert into public.trip_services (trip_id, service_id)
+select id, service_id from public.trips where service_id is not null
+on conflict do nothing;
 create index if not exists trips_date_idx on public.trips(entered_date);
 create index if not exists trips_creator_idx on public.trips(created_by);
 
@@ -82,6 +91,7 @@ alter table public.profiles  enable row level security;
 alter table public.officials enable row level security;
 alter table public.services enable row level security;
 alter table public.trips     enable row level security;
+alter table public.trip_services enable row level security;
 
 -- profiles: المستخدم يرى ملفه، والمدير يرى ويعدّل الجميع (ولا يستطيع أحد تغيير دوره بنفسه إلا المدير)
 drop policy if exists p_sel on public.profiles;
@@ -109,6 +119,17 @@ create policy t_ins on public.trips for insert to authenticated with check (crea
 create policy t_upd on public.trips for update to authenticated using (public.is_admin()) with check (public.is_admin());
 create policy t_del on public.trips for delete to authenticated using (public.is_admin());
 
+drop policy if exists ts_sel on public.trip_services;
+drop policy if exists ts_ins on public.trip_services;
+drop policy if exists ts_del on public.trip_services;
+create policy ts_sel on public.trip_services for select to authenticated using (
+  exists (select 1 from public.trips t where t.id = trip_id and (public.is_admin() or t.created_by = auth.uid()))
+);
+create policy ts_ins on public.trip_services for insert to authenticated with check (
+  exists (select 1 from public.trips t where t.id = trip_id and (public.is_admin() or t.created_by = auth.uid()))
+);
+create policy ts_del on public.trip_services for delete to authenticated using (public.is_admin());
+
 -- ---------- التحديث المباشر (Realtime) ----------
 do $$ begin
   alter publication supabase_realtime add table public.trips;
@@ -125,6 +146,7 @@ on conflict (name) do nothing;
 -- =====================================================
 create index if not exists trips_official_idx on public.trips(official_id);
 create index if not exists trips_service_idx on public.trips(service_id);
+create index if not exists trip_services_service_idx on public.trip_services(service_id);
 
 create or replace function public.touch_updated_at() returns trigger
 language plpgsql set search_path = public as $$ begin new.updated_at = now(); return new; end $$;

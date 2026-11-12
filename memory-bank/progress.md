@@ -3,6 +3,8 @@
 _Last updated: 2026-11-13. Update this file whenever a milestone changes status._
 
 ## Done
+- [x] Fixed the trip query's ambiguous `trips` → `services` embed by querying service names only through `trip_services`.
+- [x] Changed the mobile trip form to allow multiple service selections and persist them in `trip_services`; retained `trips.service_id` for legacy compatibility and added RLS/backfill in the schema.
 - [x] Requirements gathered (Arabic spec): roles, trip form, admin dashboard, branding, free-only.
 - [x] Supabase project `hajj` created (Frankfurt, free plan).
 - [x] Database schema: `profiles`, `officials`, `services`, `trips`, sequence `trip_seq`, triggers (`updated_at`, auto-profile on signup), `is_admin()` helper, Realtime on `trips`.
@@ -25,6 +27,7 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - [ ] Supabase Auth "disable sign-ups" confirmed? Unknown.
 
 ## To do (mobile)
+- [ ] Apply the updated `supabase/schema.sql` to production so `trip_services` is created and existing trips are backfilled.
 - [x] User deployed `supabase/functions/admin-create-user` to production project `cmhlxvsgnsmpuqbkhyjd` using the Supabase CLI.
 - [ ] Deploy `supabase/functions/admin-delete-user` to production project `cmhlxvsgnsmpuqbkhyjd`; manually verify authorized deletion and safeguards.
 - [ ] Manually verify admin user creation from the app and non-admin rejection against production.
@@ -46,6 +49,8 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - Free-plan Supabase has no automatic backups — owner must export JSON regularly.
 
 ## Change log
+- 2026-11-13: Removed the direct legacy `services` embed from the mobile trip query; the legacy and new relationships made `services` embedding ambiguous in PostgREST.
+- 2026-11-13: Added multi-select services to the mobile trip form and persisted selections through `trip_services`; updated schema RLS/backfill and documented applying the schema update to the live project.
 - 2026-11-12: Repo created from the web version; memory bank added.
 - 2026-11-13: Added in-app admin user creation through a role-checked Supabase Edge Function; documented deployment and server-only secret handling.
 - 2026-11-13: Confirmed the app's Supabase Data API connection settings and documented the project's URL in the environment template.

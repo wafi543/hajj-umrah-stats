@@ -19,7 +19,8 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 
 ## Immediate next steps
 1. Deploy `admin-delete-user` with the Supabase CLI (the CLI was unavailable in the latest environment) and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
-2. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
+2. Apply the updated `supabase/schema.sql` in Supabase SQL Editor to create `trip_services`, apply its RLS policies, and backfill existing trips.
+3. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
 3. Test login as admin and as an entry user, including creating the entry account from Settings.
 4. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
 5. Fonts: load Tajawal with `expo-font`.
@@ -39,6 +40,8 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - The Settings screen lets admins rename officials inline; the existing officials update RLS policy enforces admin-only writes, so no Edge Function or service-role key is involved.
 
 ## Open questions / needs owner confirmation
+- The mobile trip form now supports multiple services via `trip_services`; rerun updated `supabase/schema.sql` in production to create the relation, apply RLS, and backfill existing services.
+- The mobile trip query embeds services only through `trip_services`; embedding services directly from trips is ambiguous because the legacy `trips.service_id` relationship also exists.
 - Is "Allow new users to sign up" disabled in Supabase Auth? (Security-critical; cannot be set via MCP. Unconfirmed.)
 - Real app name, bundle identifier, Apple Developer ($99/yr) and Google Play ($25 once) accounts — store fees conflict with the "free" rule, owner must decide.
 - Any data-residency rules requiring data inside Saudi Arabia (Supabase has no KSA region).

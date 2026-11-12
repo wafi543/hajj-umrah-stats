@@ -1,10 +1,15 @@
 import { supabase } from './supabase';
 import { Lookup, Profile, Trip } from '../types';
 
-const SEL = '*, officials(name), services(name)';
+// Do not embed services directly from trips: trips.service_id is retained for
+// legacy compatibility and trip_services also links trips to services, so
+// PostgREST would otherwise see two possible trips → services relationships.
+const SEL = '*, officials(name), trip_services(service_id, services(name))';
 const flat = (t: any): Trip => ({
   ...t, no: t.trip_no, date: t.entered_date, time: (t.entered_time || '').slice(0, 5),
-  official: t.officials?.name ?? '', service: t.services?.name ?? '',
+  official: t.officials?.name ?? '',
+  service_ids: t.trip_services?.map((x: any) => x.service_id) ?? [t.service_id],
+  service: t.trip_services?.map((x: any) => x.services?.name).filter(Boolean).join('، ') ?? '',
 });
 
 /** Admin: all trips (paged, Supabase caps a request at 1000 rows). Entry user: own latest 30 (RLS enforces this). */

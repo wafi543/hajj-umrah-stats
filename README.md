@@ -53,7 +53,7 @@ memory-bank/               project context for AI agents / new devs
 ## Data model
 - `profiles(id → auth.users, email, full_name, role 'admin'|'entry')` — auto-created by a trigger on signup, default role `entry`.
 - `officials(id, name unique, active)` and `services(id, name unique, active)` — managed by admins; deactivated instead of deleted.
-- `trips(id, trip_no 'R-000001' (sequence default), count > 0, official_id, service_id, entered_date, entered_time, notes, created_by default auth.uid(), created_at, updated_at)`.
+- `trips(id, trip_no 'R-000001' (sequence default), count > 0, official_id, service_id (legacy first service), entered_date, entered_time, notes, created_by default auth.uid(), created_at, updated_at)` and `trip_services(trip_id, service_id)` for the selected services on each trip.
 
 ### Access rules (enforced by RLS, not by the UI)
 | | admin | entry |
@@ -67,7 +67,7 @@ memory-bank/               project context for AI agents / new devs
 `public.is_admin()` is a `SECURITY DEFINER` helper used by policies (the Supabase linter warns it is callable by signed-in users; this is intentional and it only returns a boolean for the caller).
 
 ## Setting up a new Supabase project
-1. Create a project, open **SQL Editor**, run `supabase/schema.sql`.
+1. Create a project, open **SQL Editor**, run `supabase/schema.sql`. For an existing project, rerun the updated script to create `trip_services` and backfill each trip's existing service.
 2. **Authentication → Users → Add user** (Auto Confirm) for yourself, then run:
    `update public.profiles set role='admin' where lower(email)=lower('you@example.com');`
 3. **Authentication → Sign In / Providers → disable "Allow new users to sign up"** (otherwise anyone can register as an entry user).
