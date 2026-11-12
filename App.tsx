@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './src/lib/supabase';
@@ -74,7 +74,10 @@ export default function App() {
         <StatusBar barStyle="dark-content" />
         <View style={{ flexDirection: 'row', alignItems: 'center', padding: 12, borderBottomWidth: 3, borderBottomColor: C.gold }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 17, fontWeight: '700', color: C.g }}>🕋 جمعية خدمات الحجاج والمعتمرين</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Image source={require('./assets/kaaba-icon.png')} style={{ width: 32, height: 32, backgroundColor: '#fff' }} resizeMode="contain" />
+              <Text style={{ fontSize: 17, fontWeight: '700', color: C.g }}>جمعية خدمات الحجاج والمعتمرين</Text>
+            </View>
             {me && <Text style={{ color: C.mu, fontSize: 12 }}>{admin ? 'المدير' : 'مدخل بيانات'}</Text>}
           </View>
           {session && <Pressable onPress={() => supabase.auth.signOut()}><Text style={{ color: C.g }}>خروج</Text></Pressable>}

@@ -3,6 +3,7 @@
 _Last updated: 2026-11-13. Update this file whenever a milestone changes status._
 
 ## Done
+- [x] Replaced the 🕋 header character with the supplied Kaaba icon, composited onto white and added at `assets/kaaba-icon.png`.
 - [x] Added ضيافة سعودية، وجبات، and سقيا to the idempotent service seed; EntryScreen's existing multi-select reads active services from Supabase.
 - [x] Fixed the trip query's ambiguous `trips` → `services` embed by querying service names only through `trip_services`.
 - [x] Changed the mobile trip form to allow multiple service selections and persist them in `trip_services`; retained `trips.service_id` for legacy compatibility and added RLS/backfill in the schema.
@@ -50,6 +51,7 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - Free-plan Supabase has no automatic backups — owner must export JSON regularly.
 
 ## Change log
+- 2026-11-13: Added the supplied Kaaba icon on a white background and used it in the app header instead of the 🕋 character.
 - 2026-11-13: Added three requested service options to the schema seed; rerunning `supabase/schema.sql` adds them to the live service lookup without duplicates.
 - 2026-11-13: Removed the direct legacy `services` embed from the mobile trip query; the legacy and new relationships made `services` embedding ambiguous in PostgREST.
 - 2026-11-13: Added multi-select services to the mobile trip form and persisted selections through `trip_services`; updated schema RLS/backfill and documented applying the schema update to the live project.

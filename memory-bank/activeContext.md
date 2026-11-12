@@ -12,6 +12,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - Two roles: **admin** (everything) and **entry** (add trips; see only own; no edit/delete).
 
 ## Current state
+- The app header in `App.tsx` uses `assets/kaaba-icon.png` (the supplied icon composited onto white) instead of the 🕋 character.
 - **Backend (done, live):** Supabase project `hajj`, ref `cmhlxvsgnsmpuqbkhyjd`, region eu-central-1 (Frankfurt), free plan. Schema + RLS applied and tested (see `supabase/schema.sql`).
 - **Data API connection:** Supabase Data API is enabled. The Expo client uses the project root URL plus the publishable key in local `.env` (`EXPO_PUBLIC_SUPABASE_ANON_KEY`, which also accepts Supabase's newer publishable key format). A secret key was shared in chat; it was not added to app config and must be rotated in Supabase.
 - **Web version (done, deployed, legacy):** single static `legacy-web/index.html` on Cloudflare Workers: https://square-smoke-c5c7.ali-alshammri50.workers.dev. Owner is using/testing it.
@@ -28,6 +29,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 6. App-store prep: real bundle id (currently `org.example.hajjstats` placeholder in `app.json`), icon/splash, EAS Build, privacy policy URL.
 
 ## Decisions & why
+- The supplied Kaaba artwork is stored as a local PNG with a white background and rendered as an image in the Arabic app header.
 - **Supabase over Firebase:** relational data + Row Level Security enforces roles in the DB (not just UI).
 - **Plain static web first, then Expo:** owner had no tooling; web was fastest to ship. Business logic in `src/lib/stats.ts` is a direct port of the web version, so behaviour should match.
 - **No navigation library yet:** tabs are plain state in `App.tsx`. Move to Expo Router when screens grow.
