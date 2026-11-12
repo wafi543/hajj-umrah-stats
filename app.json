@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "إحصائيات ضيوف الرحمن",
+    "slug": "hajj-stats",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": { "bundleIdentifier": "org.example.hajjstats", "supportsTablet": true },
+    "android": { "package": "org.example.hajjstats" }
+  }
+}

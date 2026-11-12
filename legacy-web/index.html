@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>إحصائيات رحلات ضيوف الرحمن</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕋</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#fff;--card:#f6f8f6;--tx:#1d2b24;--mu:#66736c;--g:#0f5132;--gold:#b8923a;--bd:#e1e6e2;--onG:#fff}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:Tajawal,system-ui,sans-serif;font-size:15px}
+header{border-bottom:3px solid var(--gold);padding:12px 16px;display:flex;align-items:center;gap:10px}
+header h1{font-size:17px;margin:0;color:var(--g)}header small{color:var(--mu)}header .sp{flex:1}
+.wrap{display:grid;grid-template-columns:1fr;min-height:80vh}
+@media(min-width:800px){.wrap{grid-template-columns:190px 1fr}nav{flex-direction:column;border-left:1px solid var(--bd);border-bottom:0!important}}
+nav{display:flex;gap:4px;padding:8px;border-bottom:1px solid var(--bd);overflow-x:auto}
+nav button{background:none;border:0;padding:10px 14px;border-radius:8px;font:inherit;color:var(--tx);cursor:pointer;text-align:right;white-space:nowrap}
+nav button.on{background:var(--g);color:var(--onG)}
+main{padding:14px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.k{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px}
+.k b{display:block;font-size:24px;color:var(--g)}.k span{color:var(--mu);font-size:13px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 10px;color:var(--g)}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
+button.b{background:var(--g);color:var(--onG);border:0;padding:10px 16px;border-radius:8px;font:inherit;cursor:pointer}
+button.o{background:none;color:var(--g);border:1px solid var(--g);padding:7px 12px;border-radius:8px;font:inherit;cursor:pointer}
+button.d{background:none;border:0;color:#b3261e;cursor:pointer;font:inherit}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}th{color:var(--mu);font-weight:500}
+.ok{background:rgba(15,81,50,.12);color:var(--g);padding:10px;border-radius:8px;margin-bottom:10px}
+.er{background:rgba(179,38,30,.12);color:#b3261e;padding:10px;border-radius:8px;margin-bottom:10px}
+.ch{display:flex;align-items:flex-end;gap:6px;height:170px;overflow-x:auto;padding-top:20px}
+.ch div{flex:0 0 38px;text-align:center;font-size:11px;color:var(--mu)}
+.ch i{display:block;background:var(--g);border-radius:4px 4px 0 0;margin:2px auto 0;width:22px}
+.hb{display:grid;grid-template-columns:110px 1fr 60px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
+.hb i{display:block;height:12px;background:var(--gold);border-radius:6px}
+.mu{color:var(--mu);font-size:13px}.tag{display:inline-block;background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:3px 10px;margin:3px}
+.tag.off{opacity:.5;text-decoration:line-through}
+.login{max-width:380px;margin:40px auto;padding:0 14px}
+</style></head><body>
+<header><div style="font-size:26px">🕋</div><div><h1>إحصائيات رحلات ضيوف الرحمن</h1><small id="who"></small></div><div class="sp"></div><span id="hd"></span></header>
+<div class="wrap" id="wrap"><nav id="nav"></nav><main id="app"><p class="mu">جارٍ التحميل…</p></main></div>
+
+<script>
+/* ============ الإعدادات: ضع بيانات مشروعك هنا (انظر ملف الشرح) ============ */
+const SUPABASE_URL = 'https://cmhlxvsgnsmpuqbkhyjd.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtaGx4dnNnbnNtcHVxYmtoeWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQzODQ1NDMsImV4cCI6MjEwOTk2MDU0M30.pdlVTjJhCRmaSSS5F4AJNI5tXXNSEhf0AYypjTWTQEg';
+/* ======================================================================= */
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=n=>Number(n||0).toLocaleString('ar-SA-u-nu-latn',{maximumFractionDigits:1});
+const today=()=>new Date().toLocaleDateString('sv-SE');
+const nowT=()=>new Date().toTimeString().slice(0,5);
+const S={trips:[],off:[],svc:[],users:[],me:null,admin:false,view:'entry',edit:null,msg:'',
+ f:{from:'',to:'',off:'',svc:'',q:'',grp:'day',met:'ben',sort:'date'}};
+let sb,tm;
+
+async function init(){
+  if(!window.supabase||SUPABASE_URL.includes('ضع_')){$('#app').innerHTML='<div class="er">لم تُضبط بيانات الاتصال بعد. افتح index.html وضع رابط المشروع والمفتاح (الخطوة 6 في ملف الشرح).</div>';return}
+  sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  const {data:{session}}=await sb.auth.getSession();
+  session?start(session.user):loginView();
+}
+function loginView(msg){
+  $('#nav').innerHTML='';$('#hd').innerHTML='';$('#who').textContent='';$('#wrap').style.display='block';
+  $('#app').innerHTML=`<div class="login card"><h2>تسجيل الدخول</h2>${msg?`<div class="er">${msg}</div>`:''}
+  <label>البريد الإلكتروني</label><input id="em" type="email" autocomplete="username" dir="ltr">
+  <label>كلمة المرور</label><input id="pw" type="password" autocomplete="current-password" dir="ltr" onkeydown="if(event.key==='Enter')login()">
+  <p><button class="b" style="width:100%" onclick="login()">دخول</button></p></div>`;
+}
+async function login(){
+  const {data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
+  if(error)return loginView('بيانات الدخول غير صحيحة.');
+  start(data.user);
+}
+async function logout(){await sb.auth.signOut();sb.removeAllChannels();S.trips=[];loginView()}
+async function chPw(){const p=prompt('أدخل كلمة المرور الجديدة (6 أحرف على الأقل):');if(!p)return;const {error}=await sb.auth.updateUser({password:p});alert(error?'تعذّر التغيير: '+error.message:'تم تغيير كلمة المرور.')}
+
+async function start(user){
+  $('#wrap').style.display='';
+  const {data:p,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(error||!p){$('#app').innerHTML='<div class="er">تعذّر تحميل ملف المستخدم. تأكد من تشغيل ملف schema.sql.</div>';return}
+  S.me=p;S.admin=p.role==='admin';S.view=S.admin?'dash':'entry';
+  $('#who').textContent=(S.admin?'المدير':'مدخل بيانات')+(p.full_name?' — '+p.full_name:'');
+  $('#hd').innerHTML='<button class="o" onclick="chPw()">كلمة المرور</button> <button class="o" onclick="logout()">خروج</button>';
+  await loadAll();render();
+  sb.channel('trips-live').on('postgres_changes',{event:'*',schema:'public',table:'trips'},()=>{clearTimeout(tm);tm=setTimeout(async()=>{await loadTrips();render()},400)}).subscribe();
+}
+async function loadAll(){
+  const [o,s]=await Promise.all([sb.from('officials').select('*').order('name'),sb.from('services').select('*').order('name')]);
+  S.off=o.data||[];S.svc=s.data||[];
+  if(S.admin){const u=await sb.from('profiles').select('*').order('created_at');S.users=u.data||[]}
+  await loadTrips();
+}
+async function loadTrips(){
+  const sel='*, officials(name), services(name)';let all=[];
+  if(S.admin){for(let from=0;;from+=1000){const {data,error}=await sb.from('trips').select(sel).order('id').range(from,from+999);if(error||!data)break;all=all.concat(data);if(data.length<1000)break}}
+  else{const {data}=await sb.from('trips').select(sel).order('created_at',{ascending:false}).limit(30);all=data||[]}
+  S.trips=all.map(t=>({...t,no:t.trip_no,date:t.entered_date,time:(t.entered_time||'').slice(0,5),official:t.officials?.name||'',service:t.services?.name||''}));
+}
+function render(){
+  if(!S.me)return;
+  const tabs=S.admin?[['dash','لوحة التحكم'],['log','سجل الرحلات'],['entry','تسجيل رحلة'],['set','الإعدادات']]:[['entry','تسجيل رحلة']];
+  $('#nav').innerHTML=tabs.map(([k,l])=>`<button class="${S.view===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+  $('#app').innerHTML=({dash,log,entry,set})[S.view]();
+}
+function go(v){S.view=v;S.edit=null;S.msg='';render()}
+function setF(k,v){S.f[k]=v;render()}
+const act=a=>a.filter(x=>x.active);
+function opts(a,sel,ph){return `<option value="">${ph}</option>`+a.map(x=>`<option value="${x.id}" ${x.id==sel?'selected':''}>${esc(x.name)}</option>`).join('')}
+function optsN(a,sel,ph){return `<option value="">${ph}</option>`+a.map(x=>`<option ${x.name===sel?'selected':''}>${esc(x.name)}</option>`).join('')}
+
+/* ---------- تسجيل رحلة ---------- */
+function entry(){
+  const e=S.edit||{};
+  const O=S.off.filter(x=>x.active||x.id===e.official_id),V=S.svc.filter(x=>x.active||x.id===e.service_id);
+  if(!O.length||!V.length)return `<div class="card"><h2>تسجيل رحلة</h2><div class="er">لم تُضف أسماء المسؤولين أو الخدمات بعد.${S.admin?' أضفها من «الإعدادات».':' تواصل مع المدير.'}</div></div>`;
+  const m=!S.admin?S.trips.map(t=>`<tr><td>${esc(t.no)}</td><td>${esc(t.date)}</td><td>${nf(t.count)}</td><td>${esc(t.service)}</td></tr>`).join(''):'';
+  return `<div class="card"><h2>${S.edit?'تعديل الرحلة '+esc(e.no):'تسجيل رحلة جديدة'}</h2><div id="msg">${S.msg}</div>
+  <label>عدد المستفيدين *</label><input id="f_c" type="number" min="1" step="1" inputmode="numeric" value="${e.count||''}">
+  <label>اسم المسؤول عن الرحلة *</label><select id="f_o">${opts(O,e.official_id,'اختر…')}</select>
+  <label>الخدمة المقدمة *</label><select id="f_s">${opts(V,e.service_id,'اختر…')}</select>
+  <div class="row"><div><label>تاريخ دخول الرحلة *</label><input id="f_d" type="date" value="${e.date||today()}"></div>
+  <div><label>وقت دخول الرحلة *</label><input id="f_t" type="time" value="${e.time||nowT()}"></div></div>
+  <label>ملاحظات (اختياري)</label><textarea id="f_n" rows="2">${esc(e.notes)}</textarea>
+  <p style="margin-top:14px"><button class="b" id="sv" onclick="saveTrip()">${S.edit?'حفظ التعديل':'تسجيل الرحلة'}</button></p></div>
+  ${m?`<div class="card"><h2>آخر ما سجّلته</h2><div class="tw"><table><tr><th>الرقم</th><th>التاريخ</th><th>العدد</th><th>الخدمة</th></tr>${m}</table></div></div>`:''}`;
+}
+async function saveTrip(){
+  const v=id=>document.getElementById(id).value.trim();
+  const count=Number(v('f_c')),o=v('f_o'),s=v('f_s'),d=v('f_d'),t=v('f_t'),n=v('f_n');
+  const err=m=>{$('#msg').innerHTML=`<div class="er">${m}</div>`};
+  if(!Number.isInteger(count)||count<=0)return err('عدد المستفيدين يجب أن يكون رقماً صحيحاً أكبر من صفر.');
+  if(!o||!s||!d||!t)return err('يرجى تعبئة جميع الحقول المطلوبة.');
+  $('#sv').disabled=true;
+  const row={count,official_id:+o,service_id:+s,entered_date:d,entered_time:t,notes:n};
+  let res;
+  if(S.edit)res=await sb.from('trips').update(row).eq('id',S.edit.id);
+  else res=await sb.from('trips').insert(row).select('trip_no').single();
+  if(res.error){$('#sv').disabled=false;return err('تعذّر الحفظ: '+esc(res.error.message))}
+  if(S.edit){S.edit=null;S.view='log'}
+  else S.msg=`<div class="ok">✓ تم تسجيل الرحلة بنجاح — رقم الرحلة: ${esc(res.data.trip_no)}</div>`;
+  await loadTrips();render();
+}
+
+/* ---------- أدوات التحليل ---------- */
+function filtered(){const f=S.f;return S.trips.filter(t=>(!f.from||t.date>=f.from)&&(!f.to||t.date<=f.to)&&(!f.off||t.official===f.off)&&(!f.svc||t.service===f.svc)&&(!f.q||(t.no+' '+t.official).includes(f.q)))}
+const sum=a=>a.reduce((s,t)=>s+(+t.count||0),0);
+function groupBy(a,fn){const m={};a.forEach(t=>{const k=fn(t);(m[k]=m[k]||[]).push(t)});return m}
+function gk(t){const g=S.f.grp;if(g==='month')return t.date.slice(0,7);if(g==='week'){const d=new Date(t.date+'T00:00');d.setDate(d.getDate()-d.getDay());return d.toLocaleDateString('sv-SE')}return t.date}
+function filtersHTML(){const f=S.f;return `<div class="card"><div class="row">
+ <div><label>من تاريخ</label><input type="date" value="${f.from}" onchange="setF('from',this.value)"></div>
+ <div><label>إلى تاريخ</label><input type="date" value="${f.to}" onchange="setF('to',this.value)"></div>
+ <div><label>المسؤول</label><select onchange="setF('off',this.value)">${optsN(S.off,f.off,'الكل')}</select></div>
+ <div><label>الخدمة</label><select onchange="setF('svc',this.value)">${optsN(S.svc,f.svc,'الكل')}</select></div></div></div>`}
+function hbars(rows){const mx=Math.max(1,...rows.map(r=>r[1]));return rows.map(([l,v])=>`<div class="hb"><span>${esc(l)}</span><i style="width:${v/mx*100}%"></i><b>${nf(v)}</b></div>`).join('')}
+
+/* ---------- لوحة التحكم ---------- */
+function dash(){
+  const A=S.trips,td=today(),mo=td.slice(0,7),F=filtered();
+  const tt=A.filter(t=>t.date===td),tmo=A.filter(t=>t.date.slice(0,7)===mo);
+  const k=(v,l)=>`<div class="k"><b>${v}</b><span>${l}</span></div>`;
+  const g=groupBy(F,gk),keys=Object.keys(g).sort(),met=S.f.met;
+  const val=x=>met==='ben'?sum(g[x]):g[x].length,mx=Math.max(1,...keys.map(val));
+  const lab=x=>S.f.grp==='month'?x:x.slice(5);
+  const chart=keys.length?`<div class="ch">${keys.slice(-40).map(x=>`<div><span>${nf(val(x))}</span><i style="height:${val(x)/mx*110}px"></i>${lab(x)}</div>`).join('')}</div>`:'<p class="mu">لا توجد بيانات ضمن الفترة المختارة.</p>';
+  const best=keys.length?keys.reduce((a,b)=>val(a)>=val(b)?a:b):null;
+  const tot=F.length,totB=sum(F);
+  const offs=Object.entries(groupBy(F,t=>t.official)).sort((a,b)=>sum(b[1])-sum(a[1]));
+  const svcs=Object.entries(groupBy(F,t=>t.service)).sort((a,b)=>sum(b[1])-sum(a[1]));
+  return `<div class="grid">${k(nf(A.length),'إجمالي الرحلات')}${k(nf(sum(A)),'إجمالي المستفيدين')}${k(nf(tt.length),'رحلات اليوم')}${k(nf(sum(tt)),'مستفيدو اليوم')}${k(nf(tmo.length),'رحلات هذا الشهر')}${k(A.length?nf(sum(A)/A.length):'0','متوسط المستفيدين لكل رحلة')}</div>
+  ${filtersHTML()}
+  <div class="card"><h2>التحليل الزمني</h2><div class="row"><div><select onchange="setF('grp',this.value)"><option value="day">يومي</option><option value="week" ${S.f.grp==='week'?'selected':''}>أسبوعي</option><option value="month" ${S.f.grp==='month'?'selected':''}>شهري</option></select></div>
+  <div><select onchange="setF('met',this.value)"><option value="ben">عدد المستفيدين</option><option value="trips" ${met==='trips'?'selected':''}>عدد الرحلات</option></select></div></div>
+  ${chart}${best?`<p class="mu">الأعلى أداءً: ${best} (${nf(val(best))})</p>`:''}</div>
+  <div class="card"><h2>تحليل المسؤولين</h2><div class="tw"><table><tr><th>المسؤول</th><th>الرحلات</th><th>المستفيدون</th><th>المتوسط</th><th>النسبة</th></tr>
+  ${offs.map(([n,a])=>`<tr><td>${esc(n)}</td><td>${nf(a.length)}</td><td>${nf(sum(a))}</td><td>${nf(sum(a)/a.length)}</td><td>${nf(a.length/tot*100)}%</td></tr>`).join('')||'<tr><td colspan=5 class="mu">لا توجد بيانات</td></tr>'}</table></div></div>
+  <div class="card"><h2>تحليل الخدمات</h2><div class="tw"><table><tr><th>الخدمة</th><th>الرحلات</th><th>المستفيدون</th><th>النسبة</th></tr>
+  ${svcs.map(([n,a])=>`<tr><td>${esc(n)}</td><td>${nf(a.length)}</td><td>${nf(sum(a))}</td><td>${nf(sum(a)/totB*100)}%</td></tr>`).join('')||'<tr><td colspan=4 class="mu">لا توجد بيانات</td></tr>'}</table></div>
+  <div style="margin-top:10px">${hbars(svcs.map(([n,a])=>[n,sum(a)]))}</div></div>`;
+}
+
+/* ---------- سجل الرحلات ---------- */
+function logRows(){
+  const s=S.f.sort,F=filtered().sort((a,b)=>s==='count'?b.count-a.count:s==='no'?a.no.localeCompare(b.no):(b.date+b.time).localeCompare(a.date+a.time));
+  return F.map(t=>`<tr><td>${esc(t.no)}</td><td>${esc(t.date)}</td><td>${esc(t.time)}</td><td>${esc(t.official)}</td><td>${esc(t.service)}</td><td>${nf(t.count)}</td><td>${esc(t.notes)}</td><td><button class="o" onclick="editT(${t.id})">تعديل</button> <button class="d" onclick="delT(${t.id})">حذف</button></td></tr>`).join('')||'<tr><td colspan=8 class="mu">لا توجد سجلات.</td></tr>';
+}
+function log(){return `${filtersHTML()}<div class="card"><h2>سجل الرحلات</h2><div class="row"><input placeholder="بحث برقم الرحلة أو اسم المسؤول" value="${esc(S.f.q)}" oninput="S.f.q=this.value;$('#lg').innerHTML=logRows()">
+ <select onchange="setF('sort',this.value)"><option value="date">الأحدث أولاً</option><option value="count" ${S.f.sort==='count'?'selected':''}>الأكثر مستفيدين</option><option value="no" ${S.f.sort==='no'?'selected':''}>رقم الرحلة</option></select>
+ <button class="o" onclick="exportCSV()">تصدير Excel / CSV</button></div>
+ <div class="tw" style="margin-top:10px"><table><tr><th>الرقم</th><th>التاريخ</th><th>الوقت</th><th>المسؤول</th><th>الخدمة</th><th>العدد</th><th>ملاحظات</th><th></th></tr><tbody id="lg">${logRows()}</tbody></table></div></div>`}
+function editT(id){S.edit=S.trips.find(t=>t.id===id);S.view='entry';render();scrollTo(0,0)}
+async function delT(id){if(!confirm('هل أنت متأكد من حذف هذه الرحلة؟ لا يمكن التراجع.'))return;const {error}=await sb.from('trips').delete().eq('id',id);if(error)alert('تعذّر الحذف');else{await loadTrips();render()}}
+function save(name,data,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function exportCSV(){
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['رقم الرحلة','التاريخ','الوقت','المسؤول','الخدمة','عدد المستفيدين','ملاحظات','تاريخ التسجيل'];
+  const r=filtered().map(t=>[t.no,t.date,t.time,t.official,t.service,t.count,t.notes,t.created_at].map(q).join(','));
+  save('trips-'+today()+'.csv','\ufeff'+[h.map(q).join(','),...r].join('\r\n'),'text/csv;charset=utf-8');
+}
+
+/* ---------- الإعدادات ---------- */
+function set(){
+  const li=(k,a)=>a.map(x=>`<span class="tag ${x.active?'':'off'}">${esc(x.name)} <button class="d" onclick="togL('${k}',${x.id},${x.active})">${x.active?'إيقاف':'تفعيل'}</button></span>`).join('')||'<span class="mu">لا توجد عناصر</span>';
+  const us=S.users.map(u=>`<tr><td>${esc(u.full_name||'—')}</td><td dir="ltr">${esc(u.email)}</td><td>${u.role==='admin'?'مدير':'مدخل بيانات'}</td><td><button class="o" onclick="renU('${u.id}')">الاسم</button> ${u.id!==S.me.id?`<button class="o" onclick="roleU('${u.id}','${u.role}')">${u.role==='admin'?'خفض إلى مدخل':'ترقية إلى مدير'}</button>`:''}</td></tr>`).join('');
+  return `<div class="card"><h2>المسؤولون عن الرحلات</h2>${li('officials',S.off)}<div class="row" style="margin-top:8px"><input id="a_officials" placeholder="اسم جديد"><button class="b" onclick="addL('officials')">إضافة</button></div><p class="mu">الإيقاف يخفي الاسم من النموذج دون حذف رحلاته السابقة.</p></div>
+  <div class="card"><h2>الخدمات المقدمة</h2>${li('services',S.svc)}<div class="row" style="margin-top:8px"><input id="a_services" placeholder="خدمة جديدة"><button class="b" onclick="addL('services')">إضافة</button></div></div>
+  <div class="card"><h2>المستخدمون</h2><div class="tw"><table><tr><th>الاسم</th><th>البريد</th><th>الصلاحية</th><th></th></tr>${us}</table></div>
+  <p class="mu">لإضافة مستخدم جديد: Supabase ← Authentication ← Users ← Add user، ثم يظهر هنا تلقائياً بصلاحية «مدخل بيانات».</p></div>
+  <div class="card"><h2>نسخة احتياطية</h2><p class="mu">تنزيل جميع الرحلات والقوائم بصيغة JSON. يُنصح بأخذ نسخة أسبوعياً.</p><button class="o" onclick="backup()">تنزيل نسخة احتياطية</button></div>`;
+}
+async function addL(k){const v=$('#a_'+k).value.trim();if(!v)return;const {error}=await sb.from(k).insert({name:v});if(error)return alert(error.code==='23505'?'الاسم موجود مسبقاً.':'تعذّرت الإضافة');await loadAll();render()}
+async function togL(k,id,a){await sb.from(k).update({active:!a}).eq('id',id);await loadAll();render()}
+async function renU(id){const u=S.users.find(x=>x.id===id),n=prompt('الاسم:',u.full_name||'');if(n===null)return;await sb.from('profiles').update({full_name:n.trim()}).eq('id',id);await loadAll();render()}
+async function roleU(id,r){if(!confirm('تغيير صلاحية هذا المستخدم؟'))return;await sb.from('profiles').update({role:r==='admin'?'entry':'admin'}).eq('id',id);await loadAll();render()}
+function backup(){save('backup-'+today()+'.json',JSON.stringify({exportedAt:new Date().toISOString(),officials:S.off,services:S.svc,trips:S.trips.map(({officials,services,...t})=>t)},null,1),'application/json')}
+init();
+</script></body></html>
