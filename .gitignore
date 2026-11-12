@@ -5,3 +5,4 @@ dist/
 *.log
 ios/
 android/
+.DS_Store

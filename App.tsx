@@ -74,7 +74,7 @@ export default function App() {
         <StatusBar barStyle="dark-content" />
         <View style={{ flexDirection: 'row', alignItems: 'center', padding: 12, borderBottomWidth: 3, borderBottomColor: C.gold }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 17, fontWeight: '700', color: C.g }}>🕋 إحصائيات رحلات ضيوف الرحمن</Text>
+            <Text style={{ fontSize: 17, fontWeight: '700', color: C.g }}>🕋 جمعية خدمات الحجاج والمعتمرين</Text>
             {me && <Text style={{ color: C.mu, fontSize: 12 }}>{admin ? 'المدير' : 'مدخل بيانات'}</Text>}
           </View>
           {session && <Pressable onPress={() => supabase.auth.signOut()}><Text style={{ color: C.g }}>خروج</Text></Pressable>}

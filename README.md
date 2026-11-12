@@ -1,4 +1,4 @@
-# Hajj Trips Stats — إحصائيات رحلات ضيوف الرحمن
+# Hajj Trips Stats — جمعية خدمات الحجاج والمعتمرين
 
 **Author:** Ali Alshammari
 
