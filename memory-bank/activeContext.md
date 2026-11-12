@@ -36,6 +36,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - **In-app account deletion:** Settings invokes `supabase/functions/admin-delete-user`; it verifies admin access server-side, prevents deleting the current or only admin, and blocks deletion when trips reference that user so historical ownership remains intact.
 - The user deletion button displays an Arabic loading label and inline spinner while its request is in progress.
 - The Settings users list uses the Log screen's card row pattern, with role as muted detail and horizontal promotion/demotion and destructive delete actions.
+- The Settings screen lets admins rename officials inline; the existing officials update RLS policy enforces admin-only writes, so no Edge Function or service-role key is involved.
 
 ## Open questions / needs owner confirmation
 - Is "Allow new users to sign up" disabled in Supabase Auth? (Security-critical; cannot be set via MCP. Unconfirmed.)

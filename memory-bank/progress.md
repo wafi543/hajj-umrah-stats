@@ -14,6 +14,7 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - [x] Admin user creation UI added in Settings; invokes a server-side Supabase Edge Function that validates caller identity and admin role, creates email-confirmed users with the profile trigger's default `entry` role, and keeps the service-role secret off the client.
 - [x] Admin user deletion UI added in Settings; invokes a server-side Edge Function that checks admin identity, protects the current/only admin, and refuses deletion while trips reference the account.
 - [x] Restyled the Settings users list to match LogScreen rows, including horizontal promotion/demotion and destructive delete buttons.
+- [x] Added an Arabic "تعديل الاسم" action to the officials list with inline save/cancel, empty-name validation, and duplicate-name handling; the existing admin-only RLS update policy is used.
 - [x] README updated with Edge Function deployment and secret configuration steps.
 - [x] Confirmed Supabase Data API is enabled and the local app environment already points to the project root URL with an anon key; updated `.env.example` with the project URL.
 - [x] Configured local Expo environment with the supplied publishable key (never the secret key); updated README and `.env.example` to clarify publishable-key support.
@@ -56,3 +57,4 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - 2026-11-13: Updated delete failure handling to read the HTTP response body and status, so Edge Function rejection reasons are displayed instead of only Supabase's generic non-2xx message.
 - 2026-11-13: Added an inline activity spinner and Arabic in-progress label to the active delete button; other delete buttons are disabled until the request completes.
 - 2026-11-13: Matched Settings user rows and promotion/deletion actions to the LogScreen card and button styling.
+- 2026-11-13: Added inline official name editing in Settings; existing RLS policy protects updates, so no Edge Function was needed.

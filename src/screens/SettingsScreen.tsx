@@ -8,6 +8,9 @@ type Props = { officials: Lookup[]; services: Lookup[]; users: Profile[]; me: Pr
 
 function LookupEditor({ table, title, items, onChanged }: { table: 'officials' | 'services'; title: string; items: Lookup[]; onChanged: () => Promise<void> }) {
   const [name, setName] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingName, setEditingName] = useState('');
+  const [savingId, setSavingId] = useState<number | null>(null);
   const add = async () => {
     if (!name.trim()) return;
     const { error } = await supabase.from(table).insert({ name: name.trim() });
@@ -15,13 +18,41 @@ function LookupEditor({ table, title, items, onChanged }: { table: 'officials' |
     setName(''); await onChanged();
   };
   const toggle = async (i: Lookup) => { await supabase.from(table).update({ active: !i.active }).eq('id', i.id); await onChanged(); };
+  const startEditing = (i: Lookup) => { setEditingId(i.id); setEditingName(i.name); };
+  const saveName = async (i: Lookup) => {
+    const nextName = editingName.trim();
+    if (!nextName) {
+      Alert.alert('الاسم مطلوب', 'أدخل اسم المسؤول قبل الحفظ.');
+      return;
+    }
+    if (nextName === i.name) { setEditingId(null); return; }
+    setSavingId(i.id);
+    const { error } = await supabase.from(table).update({ name: nextName }).eq('id', i.id);
+    setSavingId(null);
+    if (error) {
+      Alert.alert(error.code === '23505' ? 'الاسم مستخدم مسبقاً' : 'تعذّر تعديل الاسم', error.code === '23505' ? 'اختر اسماً مختلفاً.' : 'تحقق من الاتصال ثم حاول مجدداً.');
+      return;
+    }
+    setEditingId(null);
+    await onChanged();
+  };
   return (
     <Card>
       <H>{title}</H>
       {items.map((i) => (
-        <View key={i.id} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <T mu={!i.active}>{i.name}</T>
-          <Btn kind="o" title={i.active ? 'إيقاف' : 'تفعيل'} onPress={() => toggle(i)} />
+        <View key={i.id} style={{ marginBottom: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+            {editingId === i.id
+              ? <View style={{ flex: 1 }}><Field label="اسم المسؤول" value={editingName} onChangeText={setEditingName} /></View>
+              : <View style={{ flex: 1 }}><T mu={!i.active}>{i.name}</T></View>}
+            {editingId === i.id ? <>
+              <Btn kind="o" title={savingId === i.id ? 'جارٍ الحفظ…' : 'حفظ'} disabled={savingId === i.id} onPress={() => saveName(i)} />
+              <Btn kind="o" title="إلغاء" disabled={savingId === i.id} onPress={() => setEditingId(null)} />
+            </> : <>
+              {table === 'officials' && <Btn kind="o" title="تعديل الاسم" onPress={() => startEditing(i)} />}
+              <Btn kind="o" title={i.active ? 'إيقاف' : 'تفعيل'} onPress={() => toggle(i)} />
+            </>}
+          </View>
         </View>
       ))}
       <Field label="إضافة جديد" value={name} onChangeText={setName} />
