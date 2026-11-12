@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 
 export const C = { bg: '#ffffff', card: '#f6f8f6', tx: '#1d2b24', mu: '#66736c', g: '#0f5132', gold: '#b8923a', bd: '#e1e6e2', err: '#b3261e' };
 
@@ -8,11 +8,12 @@ export const H = ({ children }: { children: React.ReactNode }) => <Text style={s
 export const T = ({ children, mu, bold }: { children: React.ReactNode; mu?: boolean; bold?: boolean }) =>
   <Text style={[s.t, mu && { color: C.mu, fontSize: 13 }, bold && { fontWeight: '700' }]}>{children}</Text>;
 
-export function Btn({ title, onPress, kind = 'p', disabled }: { title: string; onPress: () => void; kind?: 'p' | 'o' | 'd'; disabled?: boolean }) {
+export function Btn({ title, onPress, kind = 'p', disabled, loading }: { title: string; onPress: () => void; kind?: 'p' | 'o' | 'd'; disabled?: boolean; loading?: boolean }) {
   const st = kind === 'p' ? s.bp : kind === 'o' ? s.bo : s.bd;
   const tc = kind === 'p' ? '#fff' : kind === 'o' ? C.g : C.err;
   return (
-    <Pressable onPress={onPress} disabled={disabled} style={[s.btn, st, disabled && { opacity: 0.5 }]}>
+    <Pressable onPress={onPress} disabled={disabled || loading} style={[s.btn, st, (disabled || loading) && { opacity: 0.5 }]}>
+      {loading && <ActivityIndicator size="small" color={tc} style={{ marginEnd: 8 }} />}
       <Text style={{ color: tc, fontSize: 15 }}>{title}</Text>
     </Pressable>
   );

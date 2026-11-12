@@ -18,7 +18,7 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - **Mobile version (this repo, NEW, untested):** Expo + React Native + TypeScript port of the web app, for later App Store / Google Play release. It was written without network access: `npm install` was never run and the app has never been launched. Expect small version/type fixes on first run.
 
 ## Immediate next steps
-1. Run the app and manually verify admin account creation and non-admin rejection now that `admin-create-user` is deployed to project `cmhlxvsgnsmpuqbkhyjd`.
+1. Deploy `admin-delete-user` with the Supabase CLI (the CLI was unavailable in the latest environment) and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
 2. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
 3. Test login as admin and as an entry user, including creating the entry account from Settings.
 4. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
@@ -33,6 +33,8 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - **Officials/services are deactivated, not deleted**, so historic trips keep their names (FK is `restrict`).
 - **User creation** uses the admin-only Edge Function because Supabase Auth user creation requires a service-role credential; that credential stays server-side. Role promotion remains available to admins in Settings under profile RLS.
 - **In-app account creation:** the admin Settings screen invokes `supabase/functions/admin-create-user`; the Edge Function verifies the caller's JWT and admin profile before using the server-side service-role secret to create an email-confirmed entry user.
+- **In-app account deletion:** Settings invokes `supabase/functions/admin-delete-user`; it verifies admin access server-side, prevents deleting the current or only admin, and blocks deletion when trips reference that user so historical ownership remains intact.
+- The user deletion button displays an Arabic loading label and inline spinner while its request is in progress.
 
 ## Open questions / needs owner confirmation
 - Is "Allow new users to sign up" disabled in Supabase Auth? (Security-critical; cannot be set via MCP. Unconfirmed.)

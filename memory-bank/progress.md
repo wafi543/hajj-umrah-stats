@@ -12,6 +12,7 @@ _Last updated: 2026-11-12. Update this file whenever a milestone changes status.
 - [x] Web features: login, entry form + validation, admin KPIs, time analysis (day/week/month, custom range), officials & services analysis, searchable/sortable log with edit/delete, CSV export, JSON backup, lists management, realtime updates.
 - [x] Expo/React Native port written (this repo): login, entry/edit, dashboard, log, settings, realtime, role-based tabs.
 - [x] Admin user creation UI added in Settings; invokes a server-side Supabase Edge Function that validates caller identity and admin role, creates email-confirmed users with the profile trigger's default `entry` role, and keeps the service-role secret off the client.
+- [x] Admin user deletion UI added in Settings; invokes a server-side Edge Function that checks admin identity, protects the current/only admin, and refuses deletion while trips reference the account.
 - [x] README updated with Edge Function deployment and secret configuration steps.
 - [x] Confirmed Supabase Data API is enabled and the local app environment already points to the project root URL with an anon key; updated `.env.example` with the project URL.
 - [x] Configured local Expo environment with the supplied publishable key (never the secret key); updated README and `.env.example` to clarify publishable-key support.
@@ -23,6 +24,7 @@ _Last updated: 2026-11-12. Update this file whenever a milestone changes status.
 
 ## To do (mobile)
 - [x] User deployed `supabase/functions/admin-create-user` to production project `cmhlxvsgnsmpuqbkhyjd` using the Supabase CLI.
+- [ ] Deploy `supabase/functions/admin-delete-user` to production project `cmhlxvsgnsmpuqbkhyjd`; manually verify authorized deletion and safeguards.
 - [ ] Manually verify admin user creation from the app and non-admin rejection against production.
 - [ ] Install, align versions (`npx expo install --fix`), then run app on device/simulator.
 - [ ] Manual test matrix: admin login, entry login, add trip (valid/invalid), realtime update on dashboard, edit, delete, CSV share, backup share, RTL layout on iOS and Android.
@@ -48,3 +50,7 @@ _Last updated: 2026-11-12. Update this file whenever a milestone changes status.
 - 2026-11-13: Set the local app to use the project's publishable key and documented that the secret key pasted in chat should be rotated.
 - 2026-11-13: Fixed app TypeScript errors and verified `npm run typecheck`; excluded Deno Edge Function files from Expo TypeScript checking. Deployment remains pending because Supabase CLI and authentication are unavailable locally.
 - 2026-11-13: Owner installed/authenticated Supabase CLI and deployed `admin-create-user` successfully to production; live create-user behavior still needs manual verification.
+- 2026-11-13: Added Arabic delete-user action in Settings and `admin-delete-user` Edge Function. It prevents self-deletion, deletion of the only admin, and deletion of users who own trips. Function deployment and live verification remain pending.
+- 2026-11-13: Improved Settings error reporting to distinguish an unavailable Edge Function endpoint and show a deployment hint. Production deploy was attempted, but this environment lacks the Supabase CLI and `npx` could not retrieve it.
+- 2026-11-13: Updated delete failure handling to read the HTTP response body and status, so Edge Function rejection reasons are displayed instead of only Supabase's generic non-2xx message.
+- 2026-11-13: Added an inline activity spinner and Arabic in-progress label to the active delete button; other delete buttons are disabled until the request completes.

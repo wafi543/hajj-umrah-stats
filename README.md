@@ -81,9 +81,12 @@ memory-bank/               project context for AI agents / new devs
 npx supabase login
 npx supabase link --project-ref cmhlxvsgnsmpuqbkhyjd
 npx supabase functions deploy admin-create-user
+npx supabase functions deploy admin-delete-user
 ```
 
 تستخدم الدالة أسرار `SUPABASE_URL` و`SUPABASE_ANON_KEY` و`SUPABASE_SERVICE_ROLE_KEY` الموجودة في بيئة Supabase Functions. تأكد من ضبط مفتاح الخدمة في **Supabase Dashboard → Edge Functions → Secrets** عند الحاجة؛ لا تضفه إلى `.env` أو التطبيق. الدالة تتحقق من جلسة المستدعي ومن كون دوره `admin` قبل إنشاء المستخدم، ويُنشأ الحساب الجديد بصلاحية `entry` عبر مشغل إنشاء الملف الشخصي.
+
+يمكن للمدير حذف الحسابات الأخرى من صفحة المستخدمين. الحذف لا يسمح بحذف الحساب الحالي أو المدير الوحيد، كما يُرفض إذا كانت للمستخدم رحلات مسجلة كي يبقى سجل الرحلات مرتبطًا بصاحبه. الحذف ينفذه `admin-delete-user` على الخادم باستخدام مفتاح الخدمة.
 
 ## Conventions
 - All user-facing strings are Arabic. Keep layout RTL-safe (use `flexDirection: 'row'`, not manual reversing; avoid hard-coded left/right).

@@ -36,6 +36,7 @@ export default function SettingsScreen({ officials, services, users, me, trips, 
   const [newName, setNewName] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [creating, setCreating] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [userMessage, setUserMessage] = useState<{ text: string; error: boolean } | null>(null);
   const addUser = async () => {
     const email = newEmail.trim().toLowerCase();
@@ -69,6 +70,47 @@ export default function SettingsScreen({ officials, services, users, me, trips, 
     { text: 'إلغاء', style: 'cancel' },
     { text: 'تأكيد', onPress: async () => { await supabase.from('profiles').update({ role: u.role === 'admin' ? 'entry' : 'admin' }).eq('id', u.id); await onChanged(); } },
   ]);
+  const removeUser = (u: Profile) => Alert.alert('حذف المستخدم', `هل تريد حذف حساب ${u.email ?? 'هذا المستخدم'}؟ لا يمكن التراجع عن هذا الإجراء.`, [
+    { text: 'إلغاء', style: 'cancel' },
+    { text: 'حذف', style: 'destructive', onPress: async () => {
+      setDeletingUserId(u.id);
+      try {
+        const { data, error } = await supabase.functions.invoke('admin-delete-user', { body: { user_id: u.id } });
+        if (error || data?.error) {
+          let message = data?.error as string | undefined;
+          let responseStatus: number | undefined;
+          if (!message && error?.context) {
+            const response = error.context as Response;
+            responseStatus = response.status;
+            if (typeof response.clone === 'function') {
+              try {
+                const body = await response.clone().text();
+                if (body) {
+                  try {
+                    const parsed = JSON.parse(body);
+                    message = parsed.error ?? parsed.message ?? body;
+                  } catch { message = body; }
+                }
+              } catch { /* response body could not be read */ }
+              }
+          }
+          const endpointUnavailable = error?.name === 'FunctionsFetchError';
+          Alert.alert(
+            endpointUnavailable ? 'خدمة حذف المستخدم غير متاحة' : 'تعذّر حذف المستخدم',
+            message ?? (endpointUnavailable
+              ? 'لم يتم الوصول إلى خدمة الحذف. تأكد من نشر admin-delete-user على مشروع Supabase ثم تحقق من الاتصال.'
+              : `${error?.message || 'تحقق من الاتصال ثم حاول مجددًا.'}${responseStatus ? ` (HTTP ${responseStatus})` : ''}`),
+          );
+          return;
+        }
+        await onChanged();
+      } catch {
+        Alert.alert('تعذّر حذف المستخدم', 'تحقق من الاتصال ثم حاول مجددًا.');
+      } finally {
+        setDeletingUserId(null);
+      }
+    } },
+  ]);
   const backup = () => Share.share({ title: 'backup.json', message: JSON.stringify({ exportedAt: new Date().toISOString(), officials, services, trips: trips.map(({ official, service, ...t }) => t) }) });
   return (
     <View>
@@ -85,7 +127,10 @@ export default function SettingsScreen({ officials, services, users, me, trips, 
         {users.map((u) => (
           <View key={u.id} style={{ marginBottom: 6 }}>
             <T>{`${u.email} — ${u.role === 'admin' ? 'مدير' : 'مدخل بيانات'}`}</T>
-            {u.id !== me.id && <Btn kind="o" title={u.role === 'admin' ? 'خفض إلى مدخل بيانات' : 'ترقية إلى مدير'} onPress={() => flip(u)} />}
+            {u.id !== me.id && <>
+              <Btn kind="o" title={u.role === 'admin' ? 'خفض إلى مدخل بيانات' : 'ترقية إلى مدير'} onPress={() => flip(u)} />
+              <Btn kind="o" title={deletingUserId === u.id ? 'جارٍ الحذف…' : 'حذف المستخدم'} loading={deletingUserId === u.id} disabled={deletingUserId !== null} onPress={() => removeUser(u)} />
+            </>}
           </View>
         ))}
       </Card>
