@@ -31,9 +31,9 @@ Copy `.env.example` to `.env` (a pre-filled `.env` for the live project is inclu
 
 ```
 EXPO_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=<anon/publishable key>
+EXPO_PUBLIC_SUPABASE_ANON_KEY=<publishable key, or legacy anon key>
 ```
-The anon key is public by design; security comes from RLS. **Never put the `service_role` key in the app.**
+The publishable (or legacy anon) key is public by design; security comes from RLS. **Never put a secret/service-role key in the app.**
 
 ## Project layout
 ```
@@ -73,6 +73,17 @@ memory-bank/               project context for AI agents / new devs
 3. **Authentication → Sign In / Providers → disable "Allow new users to sign up"** (otherwise anyone can register as an entry user).
 4. Put URL + anon key in `.env`.
 5. Add staff the same way as step 2 (they stay `entry`). Admins can promote users in the app's Settings tab.
+
+### إضافة المستخدمين من التطبيق
+تتيح صفحة **الإعدادات ← المستخدمون** للمدير إنشاء حساب مدخل بيانات وتأكيد البريد تلقائيًا. لأن إنشاء الحساب يحتاج صلاحية Supabase Admin، يمر الطلب عبر Edge Function ولا توضع `service_role` في التطبيق:
+
+```bash
+npx supabase login
+npx supabase link --project-ref cmhlxvsgnsmpuqbkhyjd
+npx supabase functions deploy admin-create-user
+```
+
+تستخدم الدالة أسرار `SUPABASE_URL` و`SUPABASE_ANON_KEY` و`SUPABASE_SERVICE_ROLE_KEY` الموجودة في بيئة Supabase Functions. تأكد من ضبط مفتاح الخدمة في **Supabase Dashboard → Edge Functions → Secrets** عند الحاجة؛ لا تضفه إلى `.env` أو التطبيق. الدالة تتحقق من جلسة المستدعي ومن كون دوره `admin` قبل إنشاء المستخدم، ويُنشأ الحساب الجديد بصلاحية `entry` عبر مشغل إنشاء الملف الشخصي.
 
 ## Conventions
 - All user-facing strings are Arabic. Keep layout RTL-safe (use `flexDirection: 'row'`, not manual reversing; avoid hard-coded left/right).

@@ -11,14 +11,20 @@ _Last updated: 2026-11-12. Update this file whenever a milestone changes status.
 - [x] Web app (`legacy-web/index.html`) deployed to Cloudflare Workers.
 - [x] Web features: login, entry form + validation, admin KPIs, time analysis (day/week/month, custom range), officials & services analysis, searchable/sortable log with edit/delete, CSV export, JSON backup, lists management, realtime updates.
 - [x] Expo/React Native port written (this repo): login, entry/edit, dashboard, log, settings, realtime, role-based tabs.
+- [x] Admin user creation UI added in Settings; invokes a server-side Supabase Edge Function that validates caller identity and admin role, creates email-confirmed users with the profile trigger's default `entry` role, and keeps the service-role secret off the client.
+- [x] README updated with Edge Function deployment and secret configuration steps.
+- [x] Confirmed Supabase Data API is enabled and the local app environment already points to the project root URL with an anon key; updated `.env.example` with the project URL.
+- [x] Configured local Expo environment with the supplied publishable key (never the secret key); updated README and `.env.example` to clarify publishable-key support.
 
 ## Not verified (important)
-- [ ] The Expo app has **never been installed, type-checked in full, or run**. (Written in a sandbox with no network; only a syntax-level check was done.)
+- [ ] The Expo app has **never been run** on a device or simulator. `npm run typecheck` passes for the app; Deno Edge Function code is excluded from Expo's TypeScript project and must be validated by Supabase CLI deployment.
 - [ ] Web UI interactions were never browser-tested by the author agent (only that the page is served). Owner is testing manually.
 - [ ] Supabase Auth "disable sign-ups" confirmed? Unknown.
 
 ## To do (mobile)
-- [ ] Install, align versions (`npx expo install --fix`), run typecheck, fix errors.
+- [x] User deployed `supabase/functions/admin-create-user` to production project `cmhlxvsgnsmpuqbkhyjd` using the Supabase CLI.
+- [ ] Manually verify admin user creation from the app and non-admin rejection against production.
+- [ ] Install, align versions (`npx expo install --fix`), then run app on device/simulator.
 - [ ] Manual test matrix: admin login, entry login, add trip (valid/invalid), realtime update on dashboard, edit, delete, CSV share, backup share, RTL layout on iOS and Android.
 - [ ] Native date/time pickers.
 - [ ] Real CSV/Excel file export (expo-file-system + expo-sharing).
@@ -37,3 +43,8 @@ _Last updated: 2026-11-12. Update this file whenever a milestone changes status.
 
 ## Change log
 - 2026-11-12: Repo created from the web version; memory bank added.
+- 2026-11-13: Added in-app admin user creation through a role-checked Supabase Edge Function; documented deployment and server-only secret handling.
+- 2026-11-13: Confirmed the app's Supabase Data API connection settings and documented the project's URL in the environment template.
+- 2026-11-13: Set the local app to use the project's publishable key and documented that the secret key pasted in chat should be rotated.
+- 2026-11-13: Fixed app TypeScript errors and verified `npm run typecheck`; excluded Deno Edge Function files from Expo TypeScript checking. Deployment remains pending because Supabase CLI and authentication are unavailable locally.
+- 2026-11-13: Owner installed/authenticated Supabase CLI and deployed `admin-create-user` successfully to production; live create-user behavior still needs manual verification.

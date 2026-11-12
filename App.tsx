@@ -28,7 +28,7 @@ export default function App() {
   const [editing, setEditing] = useState<Trip | null>(null);
   const [f, setFs] = useState<Filters>(F0);
   const [error, setError] = useState('');
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const setF = (p: Partial<Filters>) => setFs((x) => ({ ...x, ...p }));
   const admin = me?.role === 'admin';
 
