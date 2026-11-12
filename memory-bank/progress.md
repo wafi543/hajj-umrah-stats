@@ -3,6 +3,8 @@
 _Last updated: 2026-11-13. Update this file whenever a milestone changes status._
 
 ## Done
+- [x] Added Expo web start and static export scripts, enabled single-page web output, installed/locked Expo web dependencies, and documented Cloudflare Pages deployment in README; `npm run build:web` successfully exported `dist/`.
+- [x] Connected the local `main` branch to `https://github.com/wafi543/hajj-umrah-stats.git` and pushed it to `origin/main`.
 - [x] Replaced the 🕋 header character with the supplied Kaaba icon, composited onto white and added at `assets/kaaba-icon.png`.
 - [x] Added ضيافة سعودية، وجبات، and سقيا to the idempotent service seed; EntryScreen's existing multi-select reads active services from Supabase.
 - [x] Fixed the trip query's ambiguous `trips` → `services` embed by querying service names only through `trip_services`.
@@ -24,6 +26,7 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - [x] Configured local Expo environment with the supplied publishable key (never the secret key); updated README and `.env.example` to clarify publishable-key support.
 
 ## Not verified (important)
+- [ ] Cloudflare Pages hosting upload remains pending; Wrangler deployment access was unavailable in this environment. The build is ready in `dist/` and can be uploaded with the README command once authenticated.
 - [ ] The Expo app has **never been run** on a device or simulator. `npm run typecheck` passes for the app; Deno Edge Function code is excluded from Expo's TypeScript project and must be validated by Supabase CLI deployment.
 - [ ] Web UI interactions were never browser-tested by the author agent (only that the page is served). Owner is testing manually.
 - [ ] Supabase Auth "disable sign-ups" confirmed? Unknown.

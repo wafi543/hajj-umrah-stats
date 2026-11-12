@@ -12,17 +12,20 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - Two roles: **admin** (everything) and **entry** (add trips; see only own; no edit/delete).
 
 ## Current state
+- **GitHub repository (connected):** `https://github.com/wafi543/hajj-umrah-stats.git`; local `main` is pushed and tracks `origin/main`.
 - The app header in `App.tsx` uses `assets/kaaba-icon.png` (the supplied icon composited onto white) instead of the 🕋 character.
 - **Backend (done, live):** Supabase project `hajj`, ref `cmhlxvsgnsmpuqbkhyjd`, region eu-central-1 (Frankfurt), free plan. Schema + RLS applied and tested (see `supabase/schema.sql`).
 - **Data API connection:** Supabase Data API is enabled. The Expo client uses the project root URL plus the publishable key in local `.env` (`EXPO_PUBLIC_SUPABASE_ANON_KEY`, which also accepts Supabase's newer publishable key format). A secret key was shared in chat; it was not added to app config and must be rotated in Supabase.
 - **Web version (done, deployed, legacy):** single static `legacy-web/index.html` on Cloudflare Workers: https://square-smoke-c5c7.ali-alshammri50.workers.dev. Owner is using/testing it.
 - **Mobile version (this repo, NEW, untested):** Expo + React Native + TypeScript port of the web app, for later App Store / Google Play release. It was written without network access: `npm install` was never run and the app has never been launched. Expect small version/type fixes on first run.
+- **Expo web support (build ready, hosting pending):** `npm run web` starts Expo's browser version; `npm run build:web` creates a single-page static site in `dist/`. `react-dom`, `react-native-web`, and `@expo/metro-runtime` are installed and locked. The static export succeeded; Cloudflare Pages upload is still pending because Wrangler deployment access could not be established in this environment.
 
 ## Immediate next steps
 1. Deploy `admin-delete-user` with the Supabase CLI (the CLI was unavailable in the latest environment) and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
 2. Apply the updated `supabase/schema.sql` in Supabase SQL Editor to create `trip_services`, apply its RLS policies, and backfill existing trips.
    The schema seed now also adds the trip service options ضيافة سعودية، وجبات، وسقيا.
 3. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
+4. For the browser app, run `npm run web`; to publish, run `npx wrangler pages deploy dist --project-name hajj-stats` from the repo (Cloudflare Pages project/account access required).
 3. Test login as admin and as an entry user, including creating the entry account from Settings.
 4. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
 5. Fonts: load Tajawal with `expo-font`.

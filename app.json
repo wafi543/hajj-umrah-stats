@@ -5,6 +5,7 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "web": { "bundler": "metro", "output": "single" },
     "ios": { "bundleIdentifier": "org.example.hajjstats", "supportsTablet": true },
     "android": { "package": "org.example.hajjstats" }
   }
