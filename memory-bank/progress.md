@@ -3,6 +3,11 @@
 _Last updated: 2026-11-16. Update this file whenever a milestone changes status._
 
 ## Done
+- [x] Configured the final iOS bundle ID `org.wafi.hajj-stats`, Kaaba app icon, and iPhone launch screen using Expo's splash-screen plugin.
+- [x] Created and deployed the Arabic privacy policy to `https://hajj-stats.online/privacy-policy.html`; verified the file is on hosting and the public URL returns HTTP 200.
+- [x] Created and linked EAS project `@wafi543/hajj-stats`; generated the iOS production build profile in `eas.json`.
+- [x] Production iOS build completed successfully: version `0.1.0`, build number `3`, EAS build ID `3fb99273-71a0-4273-a873-d45fba118582`.
+- [x] Submitted that build to EAS Submit for App Store Connect/TestFlight; submission ID `130a14e8-2949-44e7-a181-cb95b35bda49`.
 - [x] Added `npm run deploy:namecheap` and a macOS shell script that builds the Expo web export, uploads it through the configured SSH alias, and checks for the deployed index; documented use in README.
 - [x] Built and deployed the Expo web export to Namecheap shared hosting at `https://hajj-stats.online/` via SSH alias `hajj-stats-namecheap`; existing hosting support files were preserved.
 - [x] Verified the live page and Kaaba image asset return HTTP 200.
@@ -50,7 +55,10 @@ _Last updated: 2026-11-16. Update this file whenever a milestone changes status.
 - [ ] Per-user display names (profiles.full_name editing UI).
 - [ ] Offline tolerance / retry for field staff with poor connectivity (nice to have).
 - [ ] Charts: consider `react-native-svg` or Victory Native if richer charts are wanted.
-- [ ] Store release: bundle id, icons, splash, EAS Build, privacy policy, store listings, TestFlight/internal testing.
+- [ ] Store release: EAS Build, store listings, TestFlight/internal testing.
+- [ ] iOS App Store path: test the app on an iPhone; build and upload to TestFlight; complete remaining store metadata; provide working review credentials; submit the selected build for App Review.
+- [ ] TestFlight submission is queued by EAS (last status `IN_QUEUE`); wait for Apple upload/processing, then test internally in TestFlight.
+- [ ] Add/verify the Supabase URL and publishable/anon key in EAS production environment. Build output said there were no EAS production environment variables; confirm the current IPA contains the config and rebuild if needed before testers use it.
 
 ## Known limitations
 - Date/time are plain text inputs (`YYYY-MM-DD`, `HH:MM`) in v1.
@@ -59,6 +67,10 @@ _Last updated: 2026-11-16. Update this file whenever a milestone changes status.
 - Free-plan Supabase has no automatic backups — owner must export JSON regularly.
 
 ## Change log
+- 2026-11-17: Rewrote the README iOS release section as step-by-step EAS setup, production env vars, build, TestFlight upload/testing, and App Store review instructions. Included current build/submission IDs; noted the build output showed no EAS production variables.
+- 2026-11-17: User completed EAS production iOS build and Apple signing setup. Submitted build `3fb99273-71a0-4273-a873-d45fba118582` through EAS Submit; submission `130a14e8-2949-44e7-a181-cb95b35bda49` remains queued for an available submitter.
+- 2026-11-17: Configured iOS bundle ID `org.wafi.hajj-stats`, app icon, and iPhone launch screen. Added Arabic privacy policy at `public/privacy-policy.html` (public URL https://hajj-stats.online/privacy-policy.html) and documented its support link.
+- 2026-11-16: Documented the iOS App Store release sequence and confirmed that pushing Git changes does not upload a build. Current app config still uses the placeholder bundle ID `org.example.hajjstats`; App Store release work is not started.
 - 2026-11-16: Added a one-command Namecheap deploy script (`npm run deploy:namecheap`) and documented its SSH alias prerequisite.
 - 2026-11-16: Deployed the Expo web export to Namecheap shared hosting (`hajj-stats.online`) via SSH/scp and confirmed the page and image asset return HTTP 200.
 - 2026-11-13: Added the supplied Kaaba icon on a white background and used it in the app header instead of the 🕋 character.

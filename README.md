@@ -4,7 +4,7 @@
 
 Mobile app (Expo / React Native / TypeScript) for recording and analysing Hajj & Umrah trip entries. Arabic RTL UI, role-based access (admin / data-entry), live dashboard. Backend is Supabase (Postgres + Auth + Realtime).
 
-> **Status:** v0.1 — ported from a working web version. The port has **not yet been run**; see `memory-bank/progress.md`.
+> **Status:** v0.1 — the first production iOS build completed. Its upload to TestFlight is queued with EAS; see `memory-bank/progress.md` for the current IDs and status.
 
 ## Stack
 | Layer | Tech |
@@ -118,11 +118,75 @@ npx supabase functions deploy admin-delete-user
 ## Testing checklist (manual)
 Admin login · entry login · empty/zero/invalid form blocked · trip saved with `R-` number · new trip appears on admin dashboard without refresh · entry user sees only own trips and has no edit/delete · edit/delete as admin · filters/search/sort · CSV share · backup share · KPI numbers match a hand count · RTL on iOS and Android · app restart keeps the session.
 
-## Release to the stores (when ready)
-1. Set real `ios.bundleIdentifier` / `android.package` and `version` in `app.json`; add icon & splash.
-2. `npm i -g eas-cli && eas login && eas build:configure`, then `eas build -p ios|android`.
-3. Submit with `eas submit`. Requires an **Apple Developer account (paid, yearly)** and a **Google Play developer account (one-time fee)**, plus a privacy-policy URL.
-4. Test with TestFlight / Play internal testing first.
+## iOS App Store release with EAS
+
+The iOS bundle ID is `org.wafi.hajj-stats`; the app icon is `assets/kaaba-icon.png` and the launch screen is `assets/launch-screen-iphone.png`. EAS is linked to `@wafi543/hajj-stats`. `eas.json` uses remote app versioning and automatically increments the iOS build number for production builds.
+
+### Before the first cloud build
+
+1. Install dependencies and the EAS CLI, then sign in to Expo:
+
+   ```bash
+   npm install
+   npm install --global eas-cli
+   eas login
+   ```
+
+2. If EAS is not configured for this checkout yet, run `eas build:configure` and select **iOS**. This repository already has an `eas.json` configuration.
+
+3. Add the Supabase client settings to the Expo project's **production** environment. The `.env` file is git-ignored, so it may not be included in a cloud build. Use the same project URL and **publishable/anon key** from `.env`; never use `service_role` in the app:
+
+   ```bash
+   eas env:set --name EXPO_PUBLIC_SUPABASE_URL --value "https://<project-ref>.supabase.co" --environment production --visibility plaintext
+   eas env:set --name EXPO_PUBLIC_SUPABASE_ANON_KEY --value "<publishable-or-anon-key>" --environment production --visibility sensitive
+   eas env:list --environment production
+   ```
+
+   Replace the placeholders with the values from `.env`. These `EXPO_PUBLIC_` values are embedded in the app bundle and are public; database security must come from Supabase RLS. EAS environments and visibility are described in [Expo's environment variables guide](https://docs.expo.dev/eas/environment-variables/).
+
+4. Check the app settings in `app.json`: use the registered bundle ID, final version, icon, and launch-screen image. Create the app record in App Store Connect first and confirm it uses bundle ID `org.wafi.hajj-stats`.
+
+### Build and upload to TestFlight
+
+1. Build the signed App Store binary in Expo's cloud:
+
+   ```bash
+   eas build --platform ios --profile production
+   ```
+
+   Sign in to the Apple Developer account when EAS prompts. Let EAS manage the distribution certificate and provisioning profile, reusing the existing team certificate if offered. The build uses the production environment and increments the build number automatically.
+
+2. After the build finishes, upload its latest IPA to App Store Connect:
+
+   ```bash
+   eas submit --platform ios --latest --wait
+   ```
+
+   The first submission may prompt for Apple sign-in and an App Store Connect API key. EAS can create/configure the API key; accept it for this project. `eas submit` uploads the binary to App Store Connect, but does not submit it for public App Store review.
+
+3. Track the EAS submission if it is queued or still processing:
+
+   ```bash
+   eas submit:list --platform ios
+   ```
+
+   After Apple finishes processing the upload, open **App Store Connect → My Apps → جمعية خدمات الحجاج والمعتمرين → TestFlight**. Add internal testers and test the build. External testers require a TestFlight group and Apple's beta review for the first build in that group.
+
+4. For future releases, build and submit in one command:
+
+   ```bash
+   eas build --platform ios --profile production --auto-submit
+   ```
+
+### Submit for App Store review
+
+After testing, complete the App Store listing and privacy details in App Store Connect. Add screenshots, age rating, support URL, the privacy-policy URL (`https://hajj-stats.online/privacy-policy.html`), and working reviewer credentials plus notes explaining the admin and entry roles. Select the processed build under the iOS app version, choose **Add for Review**, and submit it to Apple. App Review approval is separate from uploading to TestFlight.
+
+Current first release: version `0.1.0` / build `3`; EAS build ID `3fb99273-71a0-4273-a873-d45fba118582`. The TestFlight submission ID is `130a14e8-2949-44e7-a181-cb95b35bda49` and was queued at the last status check. The EAS project page is https://expo.dev/accounts/wafi543/projects/hajj-stats.
+
+### Privacy policy
+
+The Arabic privacy policy is at `public/privacy-policy.html`; after the Namecheap web export is deployed, its URL is https://hajj-stats.online/privacy-policy.html. The iOS App Store privacy-policy field should use this public URL. Its support link is https://hajj-stats.online.
 
 ## Known gaps / TODO
 See `memory-bank/progress.md` (native date pickers, real file export, Tajawal font, FlatList for big logs, offline handling).

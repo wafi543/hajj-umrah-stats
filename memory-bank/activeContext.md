@@ -30,7 +30,8 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 5. Test login as admin and as an entry user, including creating the entry account from Settings.
 6. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
 7. Fonts: load Tajawal with `expo-font`.
-8. App-store prep: real bundle id (currently `org.example.hajjstats` placeholder in `app.json`), icon/splash, EAS Build, privacy policy URL.
+8. Before distributing a TestFlight build, add `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` to the EAS production environment; the build output reported no EAS production variables, and `.env` is git-ignored. Verify the app connects to Supabase on device; create a new build after setting EAS variables if required.
+9. Complete the mobile verification, store listing/screenshots, privacy disclosures, TestFlight testing, and App Store review submission. iOS bundle ID is `org.wafi.hajj-stats`; icon and launch screen are configured.
 
 ## Decisions & why
 - The supplied Kaaba artwork is stored as a local PNG with a white background and rendered as an image in the Arabic app header.
@@ -53,3 +54,5 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - Real app name, bundle identifier, Apple Developer ($99/yr) and Google Play ($25 once) accounts — store fees conflict with the "free" rule, owner must decide.
 - Any data-residency rules requiring data inside Saudi Arabia (Supabase has no KSA region).
 - Free-plan Supabase pauses after ~1 week of inactivity; consider keep-alive or paid plan if the system becomes critical.
+- App Store metadata still needed: final store listing name, screenshots, and reviewer demo credentials with backend access. Privacy policy is deployed at https://hajj-stats.online/privacy-policy.html; support URL is https://hajj-stats.online.
+- EAS project is linked as `@wafi543/hajj-stats` (`9d1dd84c-9cf4-420e-bad3-7f3d6a05436f`). Production iOS build `3fb99273-71a0-4273-a873-d45fba118582` succeeded (v0.1.0, build 3). TestFlight submission `130a14e8-2949-44e7-a181-cb95b35bda49` is queued with EAS (`IN_QUEUE`); App Store Connect did not list a processed build at last check. Build log reported no production EAS environment variables; verify Supabase runtime configuration before testing/distribution.

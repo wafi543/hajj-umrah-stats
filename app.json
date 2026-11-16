@@ -3,10 +3,45 @@
     "name": "جمعية خدمات الحجاج والمعتمرين",
     "slug": "hajj-stats",
     "version": "0.1.0",
+    "icon": "./assets/kaaba-icon.png",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "web": { "bundler": "metro", "output": "single" },
-    "ios": { "bundleIdentifier": "org.example.hajjstats", "supportsTablet": true },
-    "android": { "package": "org.example.hajjstats" }
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "ios": {
+      "bundleIdentifier": "org.wafi.hajj-stats",
+      "icon": "./assets/kaaba-icon.png",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "org.example.hajjstats"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/launch-screen-iphone.png",
+          "imageWidth": 393,
+          "resizeMode": "contain",
+          "ios": {
+            "backgroundColor": "#ffffff",
+            "image": "./assets/launch-screen-iphone.png",
+            "imageWidth": 393,
+            "resizeMode": "contain"
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9d1dd84c-9cf4-420e-bad3-7f3d6a05436f"
+      }
+    }
   }
 }
