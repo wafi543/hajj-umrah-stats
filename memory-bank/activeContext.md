@@ -16,20 +16,21 @@ Statistics system for Hajj/Umrah trips entering the "Guests of Allah service cit
 - The app header in `App.tsx` uses `assets/kaaba-icon.png` (the supplied icon composited onto white) instead of the 🕋 character.
 - **Backend (done, live):** Supabase project `hajj`, ref `cmhlxvsgnsmpuqbkhyjd`, region eu-central-1 (Frankfurt), free plan. Schema + RLS applied and tested (see `supabase/schema.sql`).
 - **Data API connection:** Supabase Data API is enabled. The Expo client uses the project root URL plus the publishable key in local `.env` (`EXPO_PUBLIC_SUPABASE_ANON_KEY`, which also accepts Supabase's newer publishable key format). A secret key was shared in chat; it was not added to app config and must be rotated in Supabase.
-- **Web version (done, deployed, legacy):** single static `legacy-web/index.html` on Cloudflare Workers: https://square-smoke-c5c7.ali-alshammri50.workers.dev. Owner is using/testing it.
+- **Web version:** single static `legacy-web/index.html` on Cloudflare Workers: https://square-smoke-c5c7.ali-alshammri50.workers.dev. The current Expo web export is also deployed to Namecheap shared hosting at https://hajj-stats.online/ (document root `/home/hajjfmrk/public_html`).
+- The Namecheap domain's authoritative A record is `198.177.120.29`; public resolvers now return it, and HTTPS returns the deployed page when resolving directly to that host. Direct IP browsing is denied by the shared host, as expected. The execution machine's default resolver still has a stale failed lookup, so DNS caches may take time to converge.
 - **Mobile version (this repo, NEW, untested):** Expo + React Native + TypeScript port of the web app, for later App Store / Google Play release. It was written without network access: `npm install` was never run and the app has never been launched. Expect small version/type fixes on first run.
-- **Expo web support (build ready, hosting pending):** `npm run web` starts Expo's browser version; `npm run build:web` creates a single-page static site in `dist/`. `react-dom`, `react-native-web`, and `@expo/metro-runtime` are installed and locked. The static export succeeded; Cloudflare Pages upload is still pending because Wrangler deployment access could not be established in this environment.
+- **Expo web support (deployed):** `npm run web` starts Expo's browser version; `npm run build:web` creates a static site in `dist/`. The current export is live on Namecheap; the older Cloudflare Worker remains available.
 
 ## Immediate next steps
-1. Deploy `admin-delete-user` with the Supabase CLI (the CLI was unavailable in the latest environment) and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
-2. Apply the updated `supabase/schema.sql` in Supabase SQL Editor to create `trip_services`, apply its RLS policies, and backfill existing trips.
+1. For future Namecheap releases, run `npm run deploy:namecheap`; it builds and uploads the site using the configured SSH alias.
+2. Deploy `admin-delete-user` with the Supabase CLI and manually verify creation/deletion and non-admin rejection against project `cmhlxvsgnsmpuqbkhyjd`.
+3. Apply the updated `supabase/schema.sql` in Supabase SQL Editor to create `trip_services`, apply its RLS policies, and backfill existing trips.
    The schema seed now also adds the trip service options ضيافة سعودية، وجبات، وسقيا.
-3. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
-4. For the browser app, run `npm run web`; to publish, run `npx wrangler pages deploy dist --project-name hajj-stats` from the repo (Cloudflare Pages project/account access required).
-3. Test login as admin and as an entry user, including creating the entry account from Settings.
-4. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
-5. Fonts: load Tajawal with `expo-font`.
-6. App-store prep: real bundle id (currently `org.example.hajjstats` placeholder in `app.json`), icon/splash, EAS Build, privacy policy URL.
+4. `npm install && npx expo install --fix`, then run the app on a device for broader manual verification.
+5. Test login as admin and as an entry user, including creating the entry account from Settings.
+6. Replace text date/time fields with a native picker; replace text-share CSV with a real file export (see TODOs in `src/screens`).
+7. Fonts: load Tajawal with `expo-font`.
+8. App-store prep: real bundle id (currently `org.example.hajjstats` placeholder in `app.json`), icon/splash, EAS Build, privacy policy URL.
 
 ## Decisions & why
 - The supplied Kaaba artwork is stored as a local PNG with a white background and rendered as an image in the Arabic app header.

@@ -1,8 +1,12 @@
 # Progress
 
-_Last updated: 2026-11-13. Update this file whenever a milestone changes status._
+_Last updated: 2026-11-16. Update this file whenever a milestone changes status._
 
 ## Done
+- [x] Added `npm run deploy:namecheap` and a macOS shell script that builds the Expo web export, uploads it through the configured SSH alias, and checks for the deployed index; documented use in README.
+- [x] Built and deployed the Expo web export to Namecheap shared hosting at `https://hajj-stats.online/` via SSH alias `hajj-stats-namecheap`; existing hosting support files were preserved.
+- [x] Verified the live page and Kaaba image asset return HTTP 200.
+- [x] Diagnosed the reported reachability issue: direct-IP requests get a shared-host 403; Namecheap authoritative DNS and public resolvers point `hajj-stats.online` to `198.177.120.29`, and hostname-based HTTPS returns HTTP 200 when DNS is bypassed. Local DNS cache is still stale; remote interaction testing remains pending.
 - [x] Added Expo web start and static export scripts, enabled single-page web output, installed/locked Expo web dependencies, and documented Cloudflare Pages deployment in README; `npm run build:web` successfully exported `dist/`.
 - [x] Connected the local `main` branch to `https://github.com/wafi543/hajj-umrah-stats.git` and pushed it to `origin/main`.
 - [x] Replaced the 🕋 header character with the supplied Kaaba icon, composited onto white and added at `assets/kaaba-icon.png`.
@@ -26,6 +30,7 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - [x] Configured local Expo environment with the supplied publishable key (never the secret key); updated README and `.env.example` to clarify publishable-key support.
 
 ## Not verified (important)
+- [ ] Browser interactions and Supabase login were not manually tested on the Namecheap deployment.
 - [ ] Cloudflare Pages hosting upload remains pending; Wrangler deployment access was unavailable in this environment. The build is ready in `dist/` and can be uploaded with the README command once authenticated.
 - [ ] The Expo app has **never been run** on a device or simulator. `npm run typecheck` passes for the app; Deno Edge Function code is excluded from Expo's TypeScript project and must be validated by Supabase CLI deployment.
 - [ ] Web UI interactions were never browser-tested by the author agent (only that the page is served). Owner is testing manually.
@@ -54,6 +59,8 @@ _Last updated: 2026-11-13. Update this file whenever a milestone changes status.
 - Free-plan Supabase has no automatic backups — owner must export JSON regularly.
 
 ## Change log
+- 2026-11-16: Added a one-command Namecheap deploy script (`npm run deploy:namecheap`) and documented its SSH alias prerequisite.
+- 2026-11-16: Deployed the Expo web export to Namecheap shared hosting (`hajj-stats.online`) via SSH/scp and confirmed the page and image asset return HTTP 200.
 - 2026-11-13: Added the supplied Kaaba icon on a white background and used it in the app header instead of the 🕋 character.
 - 2026-11-13: Added three requested service options to the schema seed; rerunning `supabase/schema.sql` adds them to the live service lookup without duplicates.
 - 2026-11-13: Removed the direct legacy `services` embed from the mobile trip query; the legacy and new relationships made `services` embedding ambiguous in PostgREST.

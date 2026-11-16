@@ -33,7 +33,17 @@ npx expo install react-dom react-native-web
 npm run web
 ```
 
-To create a static site for hosting, run `npm run build:web`; Expo writes the site to `dist/`. For Cloudflare Pages, create a Pages project and upload the `dist` folder (or deploy it with Wrangler: `npx wrangler pages deploy dist --project-name hajj-stats`). Set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` as build environment variables in the hosting service, then rebuild after changing them. Only the public publishable/anon key belongs in the browser build; never use a service-role key.
+To create a static site for hosting, run `npm run build:web`; Expo writes the site to `dist/`. For Cloudflare Pages, create a Pages project and upload the `dist` folder (or deploy it with Wrangler: `npx wrangler pages deploy dist --project-name hajj-stats`).
+
+#### Deploy to Namecheap from macOS
+
+From the repo folder on your Mac, run this single command:
+
+```bash
+npm run deploy:namecheap
+```
+
+It builds the web app, uploads the contents of `dist/` to `hajj-stats-namecheap:public_html/`, and confirms that `index.html` is present. The SSH alias `hajj-stats-namecheap` must be configured in `~/.ssh/config` and able to connect without an interactive password prompt. The site is https://hajj-stats.online/. Set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in `.env` before building if they change. Only the public publishable/anon key belongs in the browser build; never use a service-role key.
 
 `package.json` deliberately uses `*` for react, react-native and a few libs; `expo install --fix` replaces them with the versions that match the SDK. Commit the resulting lockfile.
 
